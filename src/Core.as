@@ -1,6 +1,8 @@
 package  
 {
+	import game.Sweeper;
 	import starling.display.Sprite;
+	import starling.text.TextField;
 	
 	/**
 	 * The main instructions class
@@ -13,7 +15,10 @@ package
 		public function Core() 
 		{
 			
+			super() ;
 			
+			// create a new game view
+			addChild( new Sweeper( 20, 15, 50 ) ) ;
 			
 		}
 		

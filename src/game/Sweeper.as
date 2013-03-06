@@ -1,5 +1,7 @@
 package game 
 {
+	import starling.events.Event;
+	import flash.utils.getTimer;
 	import starling.display.Sprite;
 	import starling.text.TextField;
 	
@@ -19,6 +21,10 @@ package game
 		
 		private var initialized : Boolean = false ;
 		
+		private var startTime : Number ;
+		
+		private var gridLayer : Sprite ;
+		
 		public function Sweeper( _resW : int, _resH : int, _numMines : int ) 
 		{
 			
@@ -32,6 +38,8 @@ package game
 			
 			cells = new Vector.<Cell>() ;
 			
+			gridLayer = new Sprite() ;
+			
 			for ( var i:int = 0 ; i < resH ; ++i )
 			{
 				for ( var j:int = 0 ; j < resW ; ++j )
@@ -41,15 +49,26 @@ package game
 					function f(ii:int, jj:int):void
 					{
 						var cell:Cell = new Cell() ;
-						cell.x = 21* jj ;
-						cell.y = 21* ii ;
-						addChild(cell) ;
+						cell.x = 25* jj ;
+						cell.y = 25* ii ;
+						gridLayer.addChild(cell) ;
 						cell.triggered.add( function():void { onCellTriggered( jj, ii, cell ) ; } ) ;
 						cells.push( cell ) ;
 					}
 					f(i, j) ;
 				}
 			}
+			
+			addEventListener( Event.ADDED_TO_STAGE, onAdded ) ;
+			addChild( gridLayer ) ;
+			
+		}
+		
+		private function onAdded(e:Event):void
+		{
+			
+			removeEventListener( starling.events.Event.ADDED_TO_STAGE, onAdded ) ;
+			gridLayer.x = (stage.stageWidth - gridLayer.width) / 2 ;
 			
 		}
 		
@@ -105,6 +124,8 @@ package game
 			
 			uncovered = 0 ;
 			
+			startTime = getTimer() ;
+			
 			initialized = true ;
 			
 		}
@@ -123,8 +144,12 @@ package game
 				if ( _cell.cellType.getValue().equals( CellType.MINE ) )
 				{
 					
-					// end the game
-					trace("game over, looser") ;
+					for each( var c : Cell in cells )
+					{
+						c.peek() ;
+					}
+					_cell.reveal() ;
+					endGame( false ) ;
 					
 				}
 				else
@@ -132,7 +157,7 @@ package game
 					
 					reveal( _x, _y ) ;
 					if ( uncovered == resW * resH - numMines )
-						trace("game ended, gg") ;
+						endGame( true ) ;
 					
 				}
 				
@@ -193,6 +218,13 @@ package game
 				c.hint( hint ) ;
 				
 			}
+			
+		}
+		
+		private function endGame( _ok : Boolean ) : void
+		{
+			
+			
 			
 		}
 		

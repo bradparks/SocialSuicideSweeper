@@ -21,12 +21,14 @@ package game
 	{
 		
 		private static var UNDEFINED_TEX : Texture 	= Texture.fromBitmapData( new BitmapData( 20, 20, true, 0xFF0000FF ) ) ;
-		private static var BOMB_TEX : Texture 		= Texture.fromBitmapData( new BitmapData( 20, 20, true, 0xFFFF0000 ) ) ;
+		private static var MINE_TEX : Texture 		= Texture.fromBitmapData( new BitmapData( 20, 20, true, 0xFFFF0000 ) ) ;
 		private static var EMPTY_TEX : Texture 		= Texture.fromBitmapData( new BitmapData( 20, 20, true, 0xFF00FF00 ) ) ;
 		
 		public var triggered : Signal ;
 		
-		private var cellType : Option ; //<CellType>
+		public var cellType : Option ; //<CellType>
+		private var revealed : Boolean ;
+		public function isRevealed() : Boolean { return revealed ; }
 		
 		public function Cell() 
 		{
@@ -49,12 +51,30 @@ package game
 			
 			cellType = Option.Some( _type ) ;
 			
+		}
+		
+		public function reveal() : void
+		{
+			
+			if ( !cellType.isDefined() )
+				throw "unexpected error : this cell is not initialized" ;
+			
 			this.removeChildren() ;
 			
-			if ( cellType.getValue().equals( CellType.BOMB ) )
-				addChild( new Image(BOMB_TEX) ) ;
+			if ( cellType.getValue().equals( CellType.MINE ) )
+				addChild( new Image(MINE_TEX) ) ;
 			else
 				addChild( new Image(EMPTY_TEX) ) ;
+			
+			revealed = true ;
+			
+		}
+		
+		public function hint( _i : int ) : void
+		{
+			
+			var tf : TextField = new TextField( 20, 20, '' + _i ) ;
+			addChild( tf ) ;
 			
 		}
 		

@@ -18,7 +18,7 @@ package
 			super() ;
 			
 			// create a new game view
-			addChild( new Sweeper( 20, 15, 50 ) ) ;
+			addChild( new Sweeper( 10, 10, 10 ) ) ;
 			
 		}
 		

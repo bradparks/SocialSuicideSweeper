@@ -11,7 +11,7 @@ package game
 	{
 		
 		public static const EMPTY : CellType = new CellType( 0 ) ;
-		public static const BOMB : CellType = new CellType( 1 ) ;
+		public static const MINE : CellType = new CellType( 1 ) ;
 		
 		private var id : int ;
 		

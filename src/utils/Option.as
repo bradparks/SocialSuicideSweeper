@@ -40,7 +40,7 @@ package utils
 		public function isDefined() : Boolean
 		{
 			
-			return __isNone ;
+			return !__isNone ;
 			
 		}
 		

@@ -15,6 +15,7 @@ package game
 		private var numMines : int ;
 		
 		private var cells : Vector.<Cell> ;
+		private var uncovered : int ; // count the number of uncovered cells as they reveal, cheaper than checking the whole grid each time
 		
 		private var initialized : Boolean = false ;
 		
@@ -97,10 +98,12 @@ package game
 				for ( j = 0 ; j < tempGrid[i].length ; ++j )
 				{
 					
-					cells[i * resW + j].init( tempGrid[i][j] ? CellType.BOMB : CellType.EMPTY ) ;
+					cells[i * resW + j].init( tempGrid[i][j] ? CellType.MINE : CellType.EMPTY ) ;
 					
 				}
 			}
+			
+			uncovered = 0 ;
 			
 			initialized = true ;
 			
@@ -112,18 +115,84 @@ package game
 			if ( !initialized )
 			{
 				init( _x, _y ) ;
-				return ;
+			}
+			
+			if ( !_cell.isRevealed() )
+			{
+				
+				if ( _cell.cellType.getValue().equals( CellType.MINE ) )
+				{
+					
+					// end the game
+					trace("game over, looser") ;
+					
+				}
+				else
+				{
+					
+					reveal( _x, _y ) ;
+					if ( uncovered == resW * resH - numMines )
+						trace("game ended, gg") ;
+					
+				}
+				
 			}
 			
 		}
 		
-		public function getCell( _x : int, _y : int ) : Cell
+		// prerequist : _x and _y should be valid coordinates
+		// and cell at (_x,_y) should not be a mine
+		private function reveal( _x : int, _y : int ) : void
 		{
 			
-			if ( _x > resW || _y > resH )
-				throw "cell out of bounds" ;
+			var c:Cell = cells[ _y * resW + _x ] ;
 			
-			return cells[_y * resW + _x] ;
+			if ( c.isRevealed() )
+				return ;
+			
+			c.reveal() ;
+			++uncovered ;
+			
+			var hint : int = 0 ;
+			
+			for ( var i:int = _y - 1 ; i <= _y + 1 ; ++i )
+			{
+				for ( var j:int = _x -1 ; j <= _x + 1 ; ++j )
+				{
+					
+					if ( i < 0 || i >= resH || j < 0 || j >= resW || ( i == _y && j == _x ) )
+						continue ;
+					
+					if ( cells[i * resW + j].cellType.getValue().equals( CellType.MINE ) )
+						++hint ;
+					
+				}
+			}
+			
+			// if no mine in the surroundings, extend the mine-free zone to its limits
+			if ( hint == 0 )
+			{
+				
+				for ( i = _y - 1 ; i <= _y + 1 ; ++i )
+				{
+					for ( j = _x -1 ; j <= _x + 1 ; ++j )
+					{
+						
+						if ( i < 0 || i >= resH || j < 0 || j >= resW || ( i == _y && j == _x ) )
+							continue ;
+						
+						reveal( j, i ) ;
+						
+					}
+				}
+				
+			}
+			else
+			{
+				
+				c.hint( hint ) ;
+				
+			}
 			
 		}
 		

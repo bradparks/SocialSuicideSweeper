@@ -45,6 +45,13 @@ package utils
 			
 		}
 		
+		public function clear() : void
+		{
+			
+			callbacks.splice( 0, callbacks.length ) ;
+			
+		}
+		
 		public function dispatch( _x : * = null ) : void
 		{
 			

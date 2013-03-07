@@ -220,6 +220,13 @@ package game
 		private function endGame( _ok : Boolean ) : void
 		{
 			
+			for each ( var c : Cell in cells )
+			{
+				
+				c.triggered.clear() ;
+				
+			}
+			
 			end.complete( _ok ) ;
 			
 		}

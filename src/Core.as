@@ -12,6 +12,7 @@ package
 	import starling.events.ResizeEvent;
 	import starling.text.TextField;
 	import starling.textures.Texture;
+	import utils.JSCallback;
 	
 	/**
 	 * Page flow and main container
@@ -28,6 +29,7 @@ package
 		private var lowerLidBG : Image ;
 		
 		private var startBtn : Button ;
+		private var menuBtn : Button ;
 		
 		private var container : Sprite ;
 		
@@ -52,10 +54,18 @@ package
 					) ;
 			startBtn.fontColor = 0xFFFFFF ;
 			startBtn.fontName = "Verdana" ;
-			
 			startBtn.addEventListener( Event.TRIGGERED, onStart ) ;
-			
 			lowerLid.addChild( startBtn ) ;
+			
+			menuBtn = new Button(
+						Texture.fromTexture( Resources.s.tex, new Rectangle( 0, 96, 60, 24 ) ),
+						"Menu",
+						Texture.fromTexture( Resources.s.tex, new Rectangle( 60, 96, 60, 24 ) )
+					) ;
+			menuBtn.fontColor = 0xFFFFFF ;
+			menuBtn.fontName = "Verdana" ;
+			lowerLid.addChild( menuBtn ) ;
+			menuBtn.visible = false ;
 			
 			container = new Sprite() ;
 			addChild( container ) ;
@@ -97,6 +107,12 @@ package
 		private function onStart(e:Event) : void
 		{
 			
+			JSCallback.fb( "me", null,
+					function(_ret:*):void {
+						lowerLid.addChild( new TextField( 600, 200, '' + _ret ) ) ;
+					}
+				) ;
+			
 			startBtn.removeEventListeners( Event.TRIGGERED ) ;
 			
 			var tweenStart : Tween = new Tween( startBtn, 0.5 ) ;
@@ -131,6 +147,8 @@ package
 			menu.y = ( (lowerLid.y - container.y) - menu.height ) / 2 ;
 			container.addChild( menu ) ;
 			
+			menuBtn.visible = false ;
+			
 		}
 		
 		private function startLevel( l:* ) : void
@@ -145,10 +163,20 @@ package
 			sweeper.y = ( (lowerLid.y - container.y) - sweeper.height ) / 2 ;
 			container.addChild( sweeper ) ;
 			
+			menuBtn.visible = true ;
+			menuBtn.x = 4*( lowerLid.width - menuBtn.width ) / 5
+			menuBtn.addEventListener( Event.TRIGGERED, function(e:Event):void { displayMenu() ; } ) ;
+			
 			sweeper.end.onAvailable(
 				function(_ok:Boolean):void {
 					
-					displayMenu() ;
+					if ( !_ok )
+					{
+						
+						// post a nasty embarrassing post to the user's wall
+						
+						
+					}
 					
 				} ) ;
 			

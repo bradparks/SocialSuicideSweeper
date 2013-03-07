@@ -4,6 +4,7 @@ package game
 	import flash.utils.getTimer;
 	import starling.display.Sprite;
 	import starling.text.TextField;
+	import utils.Future;
 	
 	/**
 	 * ...
@@ -24,6 +25,8 @@ package game
 		private var startTime : Number ;
 		
 		private var gridLayer : Sprite ;
+		
+		public var end : Future ;
 		
 		public function Sweeper( _resW : int, _resH : int, _numMines : int ) 
 		{
@@ -61,6 +64,8 @@ package game
 			
 			addEventListener( Event.ADDED_TO_STAGE, onAdded ) ;
 			addChild( gridLayer ) ;
+			
+			end = new Future() ;
 			
 		}
 		
@@ -224,7 +229,7 @@ package game
 		private function endGame( _ok : Boolean ) : void
 		{
 			
-			
+			end.complete( _ok ) ;
 			
 		}
 		

@@ -62,18 +62,9 @@ package game
 				}
 			}
 			
-			addEventListener( Event.ADDED_TO_STAGE, onAdded ) ;
 			addChild( gridLayer ) ;
 			
 			end = new Future() ;
-			
-		}
-		
-		private function onAdded(e:Event):void
-		{
-			
-			removeEventListener( starling.events.Event.ADDED_TO_STAGE, onAdded ) ;
-			gridLayer.x = (stage.stageWidth - gridLayer.width) / 2 ;
 			
 		}
 		

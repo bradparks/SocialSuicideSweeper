@@ -17,8 +17,11 @@ package
 			
 			super() ;
 			
+			// display the menu
+			addChild( new Menu() ) ;
+			
 			// create a new game view
-			addChild( new Sweeper( 10, 10, 10 ) ) ;
+			//addChild( new Sweeper( 10, 10, 10 ) ) ;
 			
 		}
 		

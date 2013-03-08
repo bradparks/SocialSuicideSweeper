@@ -6,10 +6,10 @@ package utils
 	 * ...
 	 * @author Renaud Bardet
 	 */
-	public class JSCallback 
+	public class JSBridge 
 	{
 		
-		public static function fb( _method : String, _args : *, _cb : Function ) : void
+		public static function fb( _method : String, _cb : Function ) : void
 		{
 			
 			if ( ExternalInterface.available )
@@ -17,14 +17,14 @@ package utils
 				
 				var cbName:String = generateFuncName() ;
 				ExternalInterface.addCallback( cbName, _cb ) ;
+				trace( ExternalInterface.objectID ) ;
 				ExternalInterface.call(
-					"function(x){" +
-					"	FB.api(" + _method + ", x," +
-					"	function(ret) {" +
-					"		document.getElementById(" + ExternalInterface.objectID + ")." + cbName + "(ret)" +
-					"	}" +
-					"}",
-					_args
+					"function(){" +
+						"FB.api('" + _method + "'," +
+							"function(ret) {" +
+								"document.getElementById('" + ExternalInterface.objectID + "')." + cbName + "(ret) ;" +
+							"})" +
+					"}"
 				) ;
 				
 			}

@@ -12,7 +12,8 @@ package
 	import starling.events.ResizeEvent;
 	import starling.text.TextField;
 	import starling.textures.Texture;
-	import utils.JSCallback;
+	import utils.Future;
+	import utils.JSBridge;
 	
 	/**
 	 * Page flow and main container
@@ -107,12 +108,6 @@ package
 		private function onStart(e:Event) : void
 		{
 			
-			JSCallback.fb( "me", null,
-					function(_ret:*):void {
-						lowerLid.addChild( new TextField( 600, 200, '' + _ret ) ) ;
-					}
-				) ;
-			
 			startBtn.removeEventListeners( Event.TRIGGERED ) ;
 			
 			var tweenStart : Tween = new Tween( startBtn, 0.5 ) ;
@@ -124,13 +119,37 @@ package
 			tween1.animate( "y", -3*upperLid.height / 4 ) ;
 			tween2.animate( "y", lowerLid.y + 4*lowerLid.height / 5 ) ;
 			tween1.onComplete = function():void {
-				//if( !hasPermissions )
-				//	displayRules() ;
-				// else
-				displayMenu() ;
+				hasPermissions().onAvailable(
+					function(b:Boolean):void {
+						if( b )
+							displayRules() ;
+						else
+							displayMenu() ;
+					}
+				) ;
 			};
 			Starling.juggler.add( tween1 ) ;
 			Starling.juggler.add( tween2 ) ;
+			
+		}
+		
+		private function hasPermissions() : Future
+		{
+			
+			var f : Future = new Future() ;
+			JSBridge.fb( "me/permissions",
+					function(_ret:*):void {
+						f.complete( _ret.data[0].publish_actions == 1 ) ;
+					}
+				) ;
+			return f ;
+			
+		}
+		
+		private function displayRules() : void
+		{
+			
+			
 			
 		}
 		

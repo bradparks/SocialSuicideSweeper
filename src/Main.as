@@ -5,7 +5,6 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import starling.core.Starling;
-	import utils.JSCallback;
 	
 	/**
 	 * ...

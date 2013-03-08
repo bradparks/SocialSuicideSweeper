@@ -148,6 +148,7 @@ package
 			container.addChild( menu ) ;
 			
 			menuBtn.visible = false ;
+			menu.removeEventListeners( Event.TRIGGERED ) ;
 			
 		}
 		

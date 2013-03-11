@@ -140,12 +140,8 @@ package game
 				if ( _cell.cellType.getValue().equals( CellType.MINE ) )
 				{
 					
-					for each( var c : Cell in cells )
-					{
-						c.peek() ;
-					}
-					_cell.reveal() ;
 					endGame( false ) ;
+					_cell.reveal() ;
 					
 				}
 				else
@@ -224,6 +220,7 @@ package game
 			{
 				
 				c.triggered.clear() ;
+				c.peek() ;
 				
 			}
 			

@@ -13,6 +13,17 @@ package
 			{ label : "Hard", w : 30, h : 15, mines : 100 },
 		] ;
 		
+		public static const PAGES : Array = [
+			"justin.bieber" ,
+			"one.direction"
+		] ;
+		
+		public static const MESSAGES : Array = [
+			"<3",
+			"LoL",
+			"YoLo!"
+		]
+		
 	}
 
 }

@@ -114,7 +114,7 @@ package
 			
 			startBtn.removeEventListeners( Event.TRIGGERED ) ;
 			
-			var tweenStart : Tween = new Tween( startBtn, 0.5 ) ;
+			var tweenStart : Tween = new Tween( startBtn, 0.2 ) ;
 			tweenStart.animate( "alpha", .0 ) ;
 			Starling.juggler.add( tweenStart ) ;
 			
@@ -123,14 +123,15 @@ package
 			tween1.animate( "y", -3*upperLid.height / 4 ) ;
 			tween2.animate( "y", lowerLid.y + 4*lowerLid.height / 5 ) ;
 			tween1.onComplete = function():void {
-				hasPermissions().onAvailable(
+				/*hasPermissions().onAvailable(
 					function(b:Boolean):void {
 						if( b )
 							displayMenu() ;
 						else
 							displayRules() ;
 					}
-				) ;
+				) ;*/
+				displayMenu() ;
 			};
 			Starling.juggler.add( tween1 ) ;
 			Starling.juggler.add( tween2 ) ;
@@ -143,7 +144,12 @@ package
 			var f : Future = new Future() ;
 			JSBridge.fb( "me/permissions" ).onAvailable(
 					function(_ret:*):void {
-						f.complete( _ret.data[0].publish_actions == 1 ) ;
+						f.complete(
+							_ret != null &&
+							_ret.data != null &&
+							_ret.data[0] != null &&
+							_ret.data[0].publish_actions == 1
+						) ;
 					}
 				) ;
 			return f ;
@@ -196,6 +202,12 @@ package
 			disclaimerTF.y = ((lowerLid.y - container.y) - disclaimerTF.height ) / 2 ;
 			container.addChild( disclaimerTF ) ;
 			
+			context.onClear( function() : void {
+				
+				disclaimerTF.dispose() ;
+				
+			} ) ;
+			
 			if ( _times < 8 )
 			{
 				var loginBtn : Button = new Button(
@@ -228,9 +240,17 @@ package
 						) ;
 					}
 				) ;
+				
+				context.onClear( function() : void {
+					
+					loginBtn.dispose() ;
+					
+				} ) ;
+				
 			}
 			else
 			{
+				
 				disclaimerTF.vAlign = "top" ;
 				disclaimerTF.hAlign = "center" ;
 				disclaimerTF.y -= 20 ;
@@ -239,6 +259,12 @@ package
 				pony.x = (lowerLid.width - pony.width) / 2 ;
 				pony.y = disclaimerTF.y + 20 ;
 				container.addChild( pony ) ;
+				
+				context.onClear( function() : void {
+					
+					pony.dispose() ;
+					
+				} ) ;
 				
 			}
 			
@@ -255,8 +281,11 @@ package
 			menu.y = ( (lowerLid.y - container.y) - menu.height ) / 2 ;
 			container.addChild( menu ) ;
 			
-			menuBtn.visible = false ;
-			menu.removeEventListeners( Event.TRIGGERED ) ;
+			context.onClear( function() : void {
+				
+				menu.dispose() ;
+				
+			} ) ;
 			
 		}
 		
@@ -332,6 +361,15 @@ package
 					}
 					
 				} ) ;
+			
+			context.onClear( function() : void {
+				
+				sweeper.dispose() ;
+				
+				menuBtn.visible = false ;
+				menuBtn.removeEventListeners( Event.TRIGGERED ) ;
+				
+			} ) ;
 			
 		}
 		

@@ -35,6 +35,9 @@ package game
 		private var revealed : Boolean ;
 		public function isRevealed() : Boolean { return revealed ; }
 		
+		private var peekImg : Image ;
+		private var tf:TextField;
+		
 		public function Cell() 
 		{
 			
@@ -78,7 +81,7 @@ package game
 		public function hint( _i : int ) : void
 		{
 			
-			var tf : TextField = new TextField( 24, 24, '' + _i, "Verdana", 12, 0xFFFFFF ) ;
+			tf = new TextField( 24, 24, '' + _i, "Verdana", 12, 0xFFFFFF ) ;
 			addChild( tf ) ;
 			
 		}
@@ -90,7 +93,8 @@ package game
 			if ( cellType.getValue().equals( CellType.MINE ) )
 			{
 				this.removeChildren() ;
-				addChild( new Image(PEEK_TEX) ) ;
+				peekImg = new Image(PEEK_TEX) ;
+				addChild( peekImg ) ;
 			}
 			
 		}
@@ -100,6 +104,18 @@ package game
 			
 			if ( _e.getTouch( this, TouchPhase.BEGAN ) != null )
 				triggered.dispatch() ;
+			
+		}
+		
+		override public function dispose() : void
+		{
+			
+			super.dispose() ;
+			removeEventListeners( TouchEvent.TOUCH ) ;
+			if ( peekImg != null )
+				peekImg.dispose() ;
+			if ( tf != null )
+				tf.dispose() ;
 			
 		}
 		

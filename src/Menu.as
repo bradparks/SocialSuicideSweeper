@@ -61,6 +61,23 @@ package
 			
 		}
 		
+		override public function dispose() : void
+		{
+			
+			super.dispose() ;
+			
+			for each ( var c : MenuChoice in choices )
+			{
+				
+				c.resTF.dispose() ;
+				c.minesTF.dispose() ;
+				c.btn.dispose() ;
+				c.dispose() ;
+				
+			}
+			
+		}
+		
 	}
 
 }
@@ -70,7 +87,8 @@ import starling.textures.Texture;
 
 class MenuChoice extends starling.display.Sprite
 {
-	
+	public var resTF:TextField;
+	public var minesTF:TextField;
 	public var btn : Button ;
 	
 	public function MenuChoice( _label : String, _res : String, _mines : String )
@@ -87,9 +105,9 @@ class MenuChoice extends starling.display.Sprite
 		btn.fontColor = 0xFFFFFF ;
 		btn.x = 20
 		
-		var resTF:TextField = new TextField( 100, 20, _res, "Verdana", 12, 0xFFFFFF ) ;
+		resTF = new TextField( 100, 20, _res, "Verdana", 12, 0xFFFFFF ) ;
 		resTF.y = 30 ;
-		var minesTF:TextField = new TextField( 100, 20, _mines, "Verdana", 12, 0xFFFFFF ) ;
+		minesTF = new TextField( 100, 20, _mines, "Verdana", 12, 0xFFFFFF ) ;
 		minesTF.y = 60 ;
 		
 		addChild( btn ) ;

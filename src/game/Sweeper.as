@@ -228,6 +228,21 @@ package game
 			
 		}
 		
+		override public function dispose() : void
+		{
+			
+			super.dispose() ;
+			
+			for each( var c : Cell in cells )
+			{
+				
+				c.dispose() ;
+				gridLayer.dispose() ;
+				
+			}
+			
+		}
+		
 	}
 
 }
